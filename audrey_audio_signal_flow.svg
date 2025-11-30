@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="720" viewBox="0 0 1000 720">
+  <style>
+    .box { fill:#ffffff; stroke:#222; stroke-width:2; rx:8; ry:8; }
+    .node { font: 14px sans-serif; fill:#111; }
+    .param { font: 12px sans-serif; fill:#333; }
+    .arrow { stroke:#222; stroke-width:2; marker-end:url(#a); fill:none; }
+    .muted { fill:#f3f3f3; stroke:#bbb; }
+    .note { font:12px sans-serif; fill:#444; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#222"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="20" y="30" font-size="18" font-weight="700">Audrey II — 音频信号流程图（只显示音频链接与效果）</text>
+
+  <!-- Sources -->
+  <g transform="translate(20,60)">
+    <rect class="box" x="0" y="0" width="220" height="70"/>
+    <text x="14" y="24" class="node">外部音频输入（可选）</text>
+    <text x="14" y="46" class="param">→ codec ADC → AudioHandle InputBuffer</text>
+  </g>
+
+  <g transform="translate(260,60)">
+    <rect class="box" x="0" y="0" width="220" height="70"/>
+    <text x="14" y="24" class="node">内部噪声源（持续白噪声）</text>
+    <text x="14" y="46" class="param">用于激活 Karplus-Strong</text>
+  </g>
+
+  <!-- Mixer / Input -->
+  <g transform="translate(520,60)">
+    <rect class="box" x="0" y="0" width="220" height="70"/>
+    <text x="14" y="32" class="node">输入混合（外部输入 + 噪声）</text>
+  </g>
+
+  <!-- Arrow from sources to mixer -->
+  <path class="arrow" d="M240 95 L260 95" />
+  <path class="arrow" d="M480 95 L520 95" />
+
+  <!-- Karplus -->
+  <g transform="translate(40,200)">
+    <rect class="box" x="0" y="0" width="300" height="90"/>
+    <text x="16" y="30" class="node">Karplus-Strong 弦模型（核心产生器）</text>
+    <text x="16" y="54" class="param">参数：Frequency（基频）</text>
+  </g>
+
+  <!-- Soft clip / distortion -->
+  <g transform="translate(380,200)">
+    <rect class="box" x="0" y="0" width="220" height="70"/>
+    <text x="12" y="36" class="node">Soft-clipping / Distortion</text>
+  </g>
+
+  <!-- Reverb -->
+  <g transform="translate(640,200)">
+    <rect class="box" x="0" y="0" width="260" height="90"/>
+    <text x="14" y="30" class="node">Reverb（混响）</text>
+    <text x="14" y="54" class="param">参数：ReverbMix, ReverbDecay</text>
+  </g>
+
+  <!-- LPF / HPF -->
+  <g transform="translate(40,340)">
+    <rect class="box" x="0" y="0" width="300" height="90"/>
+    <text x="16" y="30" class="node">Feedback 线性滤波器组</text>
+    <text x="16" y="54" class="param">Lowpass cutoff / Highpass cutoff</text>
+  </g>
+
+  <!-- Long body delay -->
+  <g transform="translate(380,340)">
+    <rect class="box" x="0" y="0" width="520" height="90"/>
+    <text x="14" y="30" class="node">Long Delay (Body) — 长延迟（反馈回弦模型）</text>
+    <text x="14" y="54" class="param">参数：FeedbackBody, FeedbackGain（回路强度）</text>
+  </g>
+
+  <!-- Echo short delay (send) -->
+  <g transform="translate(40,480)">
+    <rect class="box" x="0" y="0" width="300" height="70"/>
+    <text x="16" y="36" class="node">Echo Delay（短延迟/效果）</text>
+    <text x="16" y="56" class="param">EchoSend, EchoTime, EchoFeedback</text>
+  </g>
+
+  <!-- Final output chain -->
+  <g transform="translate(380,480)">
+    <rect class="box" x="0" y="0" width="520" height="110"/>
+    <text x="14" y="30" class="node">输出链（混音 → 输出电平 → 限幅器 → Codec/DAC）</text>
+    <text x="14" y="56" class="param">参数：OutputVolume</text>
+    <text x="14" y="80" class="note">最终送至模拟输出（耳机/line out）</text>
+  </g>
+
+  <!-- Arrows: Mixer -> Karplus -->
+  <path class="arrow" d="M620 95 L200 200" />
+  <text x="460" y="150" class="param">混合信号进入 Karplus（激励）</text>
+
+  <!-- Karplus -> Distortion -->
+  <path class="arrow" d="M340 245 L380 245" />
+
+  <!-- Distort -> Reverb -->
+  <path class="arrow" d="M600 235 L640 235" />
+
+  <!-- Reverb -> Filters -->
+  <path class="arrow" d="M760 260 L380 340" />
+
+  <!-- Filters -> Long Delay (body) -->
+  <path class="arrow" d="M340 385 L380 385" />
+
+  <!-- Long Delay -> feedback back to Karplus input -->
+  <path class="arrow" d="M900 385 L900 260 L460 260 L460 220 L340 220" />
+  <text x="720" y="320" class="param">反馈回路（通过 FeedbackGain 控制回入 Karplus）</text>
+
+  <!-- Long Delay -> Echo send (tap) -->
+  <path class="arrow" d="M650 430 L420 480" />
+  <text x="480" y="455" class="param">输出向 Echo Delay 送信号（EchoSend）</text>
+
+  <!-- Echo -> Output mix -->
+  <path class="arrow" d="M340 520 L380 520" />
+
+  <!-- Long Delay direct -> Output -->
+  <path class="arrow" d="M700 430 L700 480" />
+
+  <!-- Output to Codec -->
+  <path class="arrow" d="M700 585 L700 590 L820 590" />
+  <text x="820" y="600" class="note">送至 Codec/DAC → 音频输出</text>
+
+  <!-- External audio path to Mixer (arrow) -->
+  <path class="arrow" d="M110 125 L520 125" />
+  <text x="260" y="110" class="param">外部输入（若有）</text>
+
+  <!-- Internal noise to mixer arrow -->
+  <path class="arrow" d="M370 125 L520 125" />
+  <text x="340" y="110" class="param">内部白噪声激励</text>
+
+  <!-- Legend -->
+  <rect x="20" y="610" width="960" height="90" rx="6" ry="6" fill="#fbfbfb" stroke="#ddd" />
+  <text x="36" y="638" class="note">说明：</text>
+  <text x="36" y="658" class="note">• 箭头表示音频信号流向；“反馈回路”表示延迟体将信号送回弦模型形成自激反馈。</text>
+  <text x="36" y="678" class="note">• 控制参数（括号内）并不在此图中与具体 MCU PIN 对应——仅表明哪条音频路径受哪些参数影响。</text>
+</svg>
