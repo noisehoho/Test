@@ -14,7 +14,7 @@
   </style>
 
   <!-- Title -->
-  <text x="500" y="28" class="title" text-anchor="middle">信号链         </text>
+  <text x="300" y="28" class="title" text-anchor="middle">信号链</text>
 
   <!-- Left inputs: External IN and Noise -->
   <g transform="translate(40,60)">
