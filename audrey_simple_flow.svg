@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/>
+    </marker>
+  </defs>
+  <style>
+    .box { fill:#ffffff; stroke:#111; stroke-width:3; rx:10; ry:10; }
+    .title { font: 18px sans-serif; font-weight:700; fill:#111; }
+    .label { font:16px sans-serif; fill:#111; text-anchor:middle; dominant-baseline:middle; }
+    .sub { font:12px sans-serif; fill:#333; text-anchor:middle; }
+    .arrow { stroke:#111; stroke-width:5; fill:none; marker-end:url(#arrow); }
+    .feedback { stroke:#cc0000; stroke-width:5; fill:none; marker-end:url(#arrow); }
+  </style>
+
+  <!-- Title -->
+  <text x="500" y="28" class="title" text-anchor="middle">Audrey II — 简化音频信号链</text>
+
+  <!-- Left inputs: External IN and Noise -->
+  <g transform="translate(40,60)">
+    <rect class="box" x="0" y="0" width="160" height="60"/>
+    <text x="80" y="22" class="label">外部 IN</text>
+    <text x="80" y="42" class="sub">(codec 输入)</text>
+
+    <rect class="box" x="0" y="90" width="160" height="60"/>
+    <text x="80" y="112" class="label">内部 Noise</text>
+    <text x="80" y="132" class="sub">(持续白噪声)</text>
+  </g>
+
+  <!-- Karplus -->
+  <g transform="translate(260,40)">
+    <rect class="box" x="0" y="0" width="220" height="100"/>
+    <text x="110" y="40" class="label">Karplus-Strong</text>
+    <text x="110" y="70" class="sub">（弦模型 / 产生声音）</text>
+  </g>
+
+  <!-- Distortion -->
+  <g transform="translate(520,20)">
+    <rect class="box" x="0" y="0" width="160" height="60"/>
+    <text x="80" y="32" class="label">Distortion</text>
+  </g>
+
+  <!-- Reverb -->
+  <g transform="translate(720,10)">
+    <rect class="box" x="0" y="0" width="220" height="80"/>
+    <text x="110" y="32" class="label">Reverb</text>
+    <text x="110" y="52" class="sub">(Mix / Decay)</text>
+  </g>
+
+  <!-- Filters -->
+  <g transform="translate(260,170)">
+    <rect class="box" x="0" y="0" width="300" height="80"/>
+    <text x="150" y="28" class="label">LPF / HPF</text>
+    <text x="150" y="52" class="sub">(调整频谱)</text>
+  </g>
+
+  <!-- Long Delay (Body) -->
+  <g transform="translate(580,170)">
+    <rect class="box" x="0" y="0" width="360" height="100"/>
+    <text x="180" y="36" class="label">Long Delay (Body)</text>
+    <text x="180" y="64" class="sub">(反馈回 Karplus)</text>
+  </g>
+
+  <!-- Echo Delay (send) -->
+  <g transform="translate(40,300)">
+    <rect class="box" x="0" y="0" width="240" height="70"/>
+    <text x="120" y="36" class="label">Echo Delay</text>
+    <text x="120" y="52" class="sub">(Send / Time / Feedback)</text>
+  </g>
+
+  <!-- Mixer / Output -->
+  <g transform="translate(320,300)">
+    <rect class="box" x="0" y="0" width="360" height="90"/>
+    <text x="180" y="36" class="label">混音 → 输出 (Limiter)</text>
+    <text x="180" y="60" class="sub">送往 Codec / OUT</text>
+  </g>
+
+  <!-- OUT box -->
+  <g transform="translate(720,320)">
+    <rect class="box" x="0" y="0" width="200" height="60"/>
+    <text x="100" y="32" class="label">Audio OUT</text>
+  </g>
+
+  <!-- Arrows: Inputs to Karplus -->
+  <path class="arrow" d="M200 90 L260 90" />
+  <path class="arrow" d="M200 150 L260 120" />
+
+  <!-- Karplus to Distortion -->
+  <path class="arrow" d="M480 90 L520 50" />
+
+  <!-- Distortion to Reverb -->
+  <path class="arrow" d="M680 50 L720 50" />
+
+  <!-- Reverb to Filters -->
+  <path class="arrow" d="M820 90 L630 210" />
+
+  <!-- Filters to Long Delay -->
+  <path class="arrow" d="M360 210 L580 210" />
+
+  <!-- Long Delay feedback to Karplus (prominent red arrow) -->
+  <path class="feedback" d="M860 220 L960 220 L960 120 L740 120 L700 120 L520 120" />
+
+  <!-- Long Delay to Echo Delay (send tap) -->
+  <path class="arrow" d="M620 260 L400 330" />
+
+  <!-- Echo Delay to Mixer -->
+  <path class="arrow" d="M280 335 L320 335" />
+
+  <!-- Long Delay direct to Mixer -->
+  <path class="arrow" d="M740 260 L680 340" />
+
+  <!-- Mixer to OUT -->
+  <path class="arrow" d="M680 345 L720 345 L720 350 L720 350 L820 350" />
+
+  <!-- External IN label arrow -->
+  <text x="150" y="38" class="sub" text-anchor="middle">外部 IN</text>
+  <text x="150" y="118" class="sub" text-anchor="middle">内部 Noise</text>
+
+</svg>
